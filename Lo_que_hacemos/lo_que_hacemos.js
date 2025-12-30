@@ -321,6 +321,150 @@ style.textContent = `
     }
 `;
 document.head.appendChild(style);
+
+// ==================== PROTECCIONES DE SEGURIDAD ====================
+
+// 1. Deshabilitar click derecho
 document.addEventListener('contextmenu', function(e) {
     e.preventDefault();
+    return false;
 });
+
+// 2. Deshabilitar F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U, Ctrl+S
+document.addEventListener('keydown', function(e) {
+    // F12
+    if (e.key === 'F12') {
+        e.preventDefault();
+        return false;
+    }
+    
+    // Ctrl+Shift+I (Inspeccionar)
+    if (e.ctrlKey && e.shiftKey && e.key === 'I') {
+        e.preventDefault();
+        return false;
+    }
+    
+    // Ctrl+Shift+J (Consola)
+    if (e.ctrlKey && e.shiftKey && e.key === 'J') {
+        e.preventDefault();
+        return false;
+    }
+    
+    // Ctrl+Shift+C (Selector de elementos)
+    if (e.ctrlKey && e.shiftKey && e.key === 'C') {
+        e.preventDefault();
+        return false;
+    }
+    
+    // Ctrl+U (Ver código fuente)
+    if (e.ctrlKey && e.key === 'u') {
+        e.preventDefault();
+        return false;
+    }
+    
+    // Ctrl+S (Guardar página)
+    if (e.ctrlKey && e.key === 's') {
+        e.preventDefault();
+        return false;
+    }
+    
+    // Ctrl+Shift+K (Consola en Firefox)
+    if (e.ctrlKey && e.shiftKey && e.key === 'K') {
+        e.preventDefault();
+        return false;
+    }
+});
+
+// 3. Detectar si las DevTools están abiertas
+(function() {
+    const devtools = /./;
+    devtools.toString = function() {
+        this.opened = true;
+    };
+    
+    const checkDevTools = setInterval(function() {
+        console.log('%c', devtools);
+        if (devtools.opened) {
+            alert('⚠️ Herramientas de desarrollo detectadas. Por favor, ciérralas.');
+            window.location.reload();
+        }
+        devtools.opened = false;
+    }, 1000);
+})();
+
+// 4. Detectar DevTools por dimensiones de ventana
+(function() {
+    const threshold = 160;
+    const widthThreshold = window.outerWidth - window.innerWidth > threshold;
+    const heightThreshold = window.outerHeight - window.innerHeight > threshold;
+    
+    if (widthThreshold || heightThreshold) {
+        // DevTools probablemente abierto al cargar
+    }
+    
+    window.addEventListener('resize', function() {
+        const widthThreshold = window.outerWidth - window.innerWidth > threshold;
+        const heightThreshold = window.outerHeight - window.innerHeight > threshold;
+        
+        if (widthThreshold || heightThreshold) {
+            document.body.innerHTML = '<h1 style="text-align:center;margin-top:50px;">⚠️ Por favor, cierra las herramientas de desarrollo</h1>';
+        }
+    });
+})();
+
+// 5. Deshabilitar selección de texto
+document.addEventListener('selectstart', function(e) {
+    e.preventDefault();
+    return false;
+});
+
+// 6. Deshabilitar copiar
+document.addEventListener('copy', function(e) {
+    e.preventDefault();
+    return false;
+});
+
+// 7. Deshabilitar arrastrar imágenes
+document.addEventListener('dragstart', function(e) {
+    e.preventDefault();
+    return false;
+});
+
+// 8. Protección contra screenshots (limitado)
+document.addEventListener('keyup', function(e) {
+    // Print Screen
+    if (e.key === 'PrintScreen') {
+        navigator.clipboard.writeText('');
+        alert('⚠️ Screenshots deshabilitadas');
+    }
+});
+
+// 9. Limpiar consola constantemente
+setInterval(function() {
+    console.clear();
+}, 1000);
+
+// 10. Mensaje de advertencia en consola
+console.log('%c⚠️ ADVERTENCIA', 'color: red; font-size: 50px; font-weight: bold;');
+console.log('%cEsta es una función del navegador destinada a desarrolladores.', 'font-size: 16px;');
+console.log('%cSi alguien te pidió que copies y pegues algo aquí, es un fraude.', 'font-size: 16px;');
+console.log('%c© HVAC - Instalaciones Termomecánicas', 'font-size: 14px; font-weight: bold;');
+
+// 11. Detectar si el usuario está intentando ver el código fuente
+window.addEventListener('blur', function() {
+    setTimeout(function() {
+        if (document.activeElement === document.querySelector('iframe')) {
+            // Posible intento de ver código fuente
+        }
+    }, 100);
+});
+
+// 12. Ofuscar el código en runtime (avanzado)
+(function() {
+    const originalLog = console.log;
+    console.log = function() {
+        // Sobrescribir console.log
+    };
+})();
+
+// ==================== FIN PROTECCIONES ====================
